@@ -1,0 +1,55 @@
+{
+  "name": "internship-autopilot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n worker,web \"tsx watch apps/worker/index.ts\" \"npm run dev -w apps/web\"",
+    "worker": "tsx apps/worker/index.ts",
+    "build": "npm run typecheck && tsc -p tsconfig.worker.json && npm run build -w apps/web",
+    "start": "concurrently -k -n worker,web \"node dist/apps/worker/index.js\" \"npm run start -w apps/web\"",
+    "format": "prettier --write apps packages scripts tests *.json *.ts",
+    "typecheck": "tsc --noEmit && npm run typecheck -w apps/web",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "record:demo": "tsx scripts/record-demo.ts",
+    "verify:tinyfish": "tsx scripts/verify-tinyfish.ts",
+    "verify:gemini": "tsx scripts/verify-gemini.ts",
+    "verify:live-discovery": "tsx scripts/verify-live-discovery.ts",
+    "cleanup:browser": "tsx scripts/cleanup-browser.ts",
+    "browser:install": "playwright install chromium"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "@tiny-fish/sdk": "latest",
+    "cron-parser": "^5.10.2",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "googleapis": "^160.0.0",
+    "multer": "^2.0.2",
+    "pdf-lib": "^1.17.1",
+    "pdf-parse": "^2.4.5",
+    "playwright": "^1.55.0",
+    "twilio": "^5.9.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/express": "^5.0.0",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.0.0",
+    "@types/supertest": "^6.0.3",
+    "concurrently": "^9.2.0",
+    "prettier": "^3.9.10",
+    "supertest": "^7.1.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.4"
+  }
+}
